@@ -1,4 +1,6 @@
 module Preguntas
+    CONSTANTE = 0
+
     def self.para_mi
     end
 
