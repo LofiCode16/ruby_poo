@@ -2,8 +2,13 @@ module Preguntas
     def self.para_mi
     end
 
-    def quien_soy
-        'soy algo, pero no sé aun'
+    module InfoMia
+        def quien_soy
+            'soy algo, pero no sé aun'
+        end
+    end
+
+    class Nose
     end
 
     def como_estoy
@@ -16,12 +21,22 @@ module Preguntas
 end
 
 class Cosa
+    # mixins
     # include Preguntas     # agrega los métodos del módulo a la instancia
-    # extend Preguntas      # agrega los métodos del módulo a la clase
+    # extend Preguntas::InfoMia      # agrega los métodos del módulo a la clase
+    include Preguntas
 
     attr_reader :nombre
 
     def initialize(nombre)
         @nombre = nombre
+    end
+
+    def crear_instancia     # la instancia puede crear otras instancias de la clase Nose si se usa el include
+        Nose.new
+    end
+
+    def self.instancia_nose     # la clase Cosa puede crear instancias de la clase Nose si se usa el include
+        Nose.new
     end
 end
