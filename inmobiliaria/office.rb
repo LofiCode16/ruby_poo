@@ -1,18 +1,19 @@
 module Office
     module Sales
-        class SalesOffice
-            def initialize(nombre, direccion)
-                @nombre = nombre 
-                @direccion = direccion
+
+        class Sales
+            attr_accessor :name
+            def initialize(name)
+                @name = name
             end
         end
     end
 
-    module Admin
-        class AdminOffice
-            def initialize(nombre, direccion)
-              @nombre = nombre
-              @direccion
+
+        class Admin
+            attr_accessor :name
+            def initialize(name)
+                @name = name
             end
         end
     end
