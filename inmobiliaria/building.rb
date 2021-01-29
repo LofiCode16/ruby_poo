@@ -1,61 +1,71 @@
-require_relative 'office'
+class Construction
+    attr_accessor :edificios
+    attr_accessor :oficinas
+    attr_accessor :inmobiliarias
 
-class Building
-    include Office::Sales
-    include Office::Admin
-
-    attr_reader :nombre, :dptos, :inmobiliaria, :constructora
-    @@cant = 0
-
-    def initialize(nombre, dptos, direccion, inmobiliaria, constructora)
-        @nombre = nombre
-        @dptos = dptos
-        @direccion = direccion
-        @oficina_ventas = SalesOffice.new("oficina de ventas #{nombre}", direccion)
-        @oficina_administracion = AdminOffice.new("oficina administracion #{nombre}", direccion)
-
-        if inmobiliaria.class != Array && constructora.class != Array
-            @constructora = constructora
-            @inmobiliaria = inmobiliaria
-        else
-            raise ArgumentError.new('Sólo puede pertenecer a una inmobiliaria y una constructora')
-        end
-
-        @@cant += 1
+    def initialize()
+        @inmobiliarias = [Inmobiliaria.new('Arboleda'),Inmobiliaria.new('Inmob'),Inmobiliaria.new('Inmob2')]
+        @edificios = [Building.new('Pepito',@inmobiliarias[0]),Building.new('Juanito',@inmobiliarias[1]),Building.new('Parque',@inmobiliarias[2])]
+        @oficinas = [Oficinas::Administrativa.new(),Oficinas::Administrativa.new(),Oficinas::Administrativa.new(),Oficinas::Administrativa.new()]
     end
 
-    def self.cant
-        @@cant
+    def agregar_edificio(edificio)
+        @edificios.push(edificio)
     end
+
+    def agregar_inmobiliaria(inmobiliaria)
+        @inmobiliarias.push(inmobiliaria)
+    end
+
 end
 
-class Construction
-    include Office::Admin
-    attr_reader :nombre, :oficina_admin
-
+class Inmobiliaria
+    @nombre
+    
     def initialize(nombre)
         @nombre = nombre
-        @oficina_admin = AdminOffice.new("oficina admin #{nombre}", "direccion random")
     end
 end
 
-class RealState
-    include Office::Sales
-    include Office::Admin
+class Building
 
-    attr_accessor :nombre, :direccion, :oficinas_admin, :oficinas_ventas
 
-    def initialize(nombre, direccion)
+    attr_accessor :inmobiliaria
+
+    def initialize(nombre, inmobiliaria)
         @nombre = nombre
-        @direccion = direccion
-        @oficina_admin = AdminOffice.new("oficina de admin #{nombre}", "direccion random")
-        @oficinas_ventas = []
-
-        3.times do 
-            @oficinas_ventas << SalesOffice.new("oficina ventas #{nombre}", "direccion random")
-        end
+        @inmobiliaria = inmobiliaria
+        @oficinas = [Oficinas::Administrativa, Oficinas::Ventas]
     end
 end
+
+module Oficinas
+
+    class Oficina
+    end
+    
+    class Administrativa < Oficina
+    end
+    
+    class Ventas < Oficina
+    end
+
+end
+
+
+constructora = Construction.new()
+inmobiliaria = Inmobiliaria.new('adjks')
+edificio = Building.new('aasldjf',inmobiliaria)
+constructora.agregar_edificio(edificio)
+constructora.agregar_inmobiliaria(Inmobiliaria.new('Inmobiliaria Pepito'))
+constructora.edificios[0].inmobiliaria = constructora.inmobiliarias[3]
+
+print constructora.edificios
+
+# print constructora.oficinas
+# print constructora.edificios
+
+# Constructora > Inmobiliaria > Edificio > Oficina 
 
 # 1.- construir 3 edificios
 # 2.- cada edificio pertenece a una inmobiliaria
@@ -64,12 +74,3 @@ end
 # 5.- la inmobiliaria tendrá una oficina administrativa y 3 de ventas
 # 6.- la constructora tendrá 4 oficinas administrativas
 
-# constructora = Construction.new('constructora uno')
-
-# inmobiliaria1 = RealState.new('imnouno', 'lejos 456')
-# inmobiliaria2 = RealState.new('imnodos', 'medio lejos 456')
-# inmobiliaria3 = RealState.new('imnotres', 'cerca 456')
-
-# edificio1 = Building.new('edificio alto', 200, 'lejos 123', inmobiliaria1, constructora)
-# edificio2 = Building.new('edificio medio', 150, 'cerca 123', inmobiliaria2, constructora)
-# edificio3 = Building.new('edificio bajo', 100, 'muy cerca 123', inmobiliaria3, constructora)
