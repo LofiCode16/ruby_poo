@@ -26,10 +26,11 @@ class Cosa
     # extend Preguntas::InfoMia      # agrega los métodos del módulo a la clase
     include Preguntas
 
-    attr_reader :nombre
+    attr_reader :nombre, :nose
 
-    def initialize(nombre)
+    def initialize(nombre=nil)
         @nombre = nombre
+        @nose = Nose.new    # agrega un objeto como atributo inicial de una instancia si se usa el include
     end
 
     def crear_instancia     # la instancia puede crear otras instancias de la clase Nose si se usa el include
